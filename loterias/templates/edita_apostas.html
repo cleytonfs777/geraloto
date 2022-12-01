@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block 'titulo'%}Cadastro{% endblock %}
+
+{% block 'content' %}
+<div class="container rounded shadow p-4">
+    {% if status == '2'%}
+      <div class="alert alert-danger" role="alert">
+        Aposta já cadastrada
+      </div>
+    {% endif %}
+    {% if status == '3'%}
+      <div class="alert alert-danger" role="alert">
+        A aposta deve conter 50 numeros
+      </div>
+    {% endif %}
+
+    {% if status == '1'%}
+        <div class="alert alert-success" role="alert">
+            Aposta cadastrada com sucesso
+        </div>
+    {% endif %}
+    {% if  edita %}
+    <form action="{% url 'salva_apostas' apostas.pk%}" method="POST">
+      {% else %}
+    <form action="{% url 'trata_aposta'%}" method="POST">
+    {% endif %}
+      {% csrf_token %}
+          <h1 class="align-middle"> Cadastre suas apostas</h1>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Concurso</label>
+      <input type="text" name="concurso" value="{{apostas.fields.concurso}}" class="form-control" style="width: 50%;" placeholder="Concurso escolhido">
+      <smallclass="form-text text-muted">Insira apenas os numeros do concurso desejado</smallclass=>
+    </div>
+    <div class="border">
+      <br>
+      <div class="container">
+        <div class="row d-flex justify-content-around">
+          <button type="button" onclick="geraAlea()" class="btn btn-primary">Gerar Aleatória</button>
+          <button type="button" onclick="limpaTudo()" class="btn btn-primary">Limpar Apostas</button>
+        </div>
+      </div>
+      <br>
+      <p style="margin: 10px;font-size:20px"><span id="contador" style="font-size:30px">{{apostas.tamanho}}</span> números escolhidos</p>
+      <br>
+      <div>
+        {% for i in range %}
+        {% if  i in apostas.fields.num_selected_2 %}
+        <button style="background-color:#3d1bfa;color:#fff" class="bolinhas rounded-circle border border-dark m1" onclick="insere_num({{i}})" type="button" id="item{{i}}">{{i}}</button>
+        {% else %}
+        <button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num({{i}})" type="button" id="item{{i}}">{{i}}</button>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <br>
+      <input class="form-control border" value="{{ apostas.fields.num_selected }}" name="num_selected" id="escolhidos" type="text" placeholder="Numeros escolhidos..."  readonly>
+
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Data</label>
+
+      <input type="date" value="{{ apostas.fields.data }}" id="data" name="data" class="form-control">
+    </div>
+      {% if  edita %}
+      <input style="width: 100%;" type="submit" value="Salvar" class="btn btn-primary mb-3">
+      {% else %}
+      <input style="width: 100%;" type="submit" value="Apostar" class="btn btn-success mb-3">
+      {% endif %}
+</form>
+</div>
+
+<script>
+    function geraAlea(){
+      let arri = geraNumeros(50)
+      letreiro = document.getElementById('escolhidos')
+      contador = document.getElementById('contador')
+      limpaBolinhas()
+      for(let v1 of arri){
+        document.getElementById(`item${v1}`).style.backgroundColor='#3d1bfa'
+        document.getElementById(`item${v1}`).style.color='#fff'
+      }
+      contador = document.getElementById('contador')
+      contador.innerText = arri.length
+      nova = JSON.stringify(arri)
+      nova = nova.replace('[','')
+      nova = nova.replace(']','')
+      letreiro.value = nova
+
+    }
+    function limpaTudo(){
+      limpaBolinhas()
+      document.getElementById('escolhidos').value = ""
+      document.getElementById('data').value = ""
+      contador.innerText = 0
+    }
+    function limpaBolinhas(){
+      letreiro = document.getElementById('escolhidos')
+      bolinhas = document.querySelectorAll('.bolinhas')
+      for(let bolinha of bolinhas){
+        bolinha.style.backgroundColor='#ffaa00'
+        bolinha.style.color='#000'
+      }
+
+    }
+
+    function insere_num(v1){
+        letreiro = document.getElementById('escolhidos')
+        contador = document.getElementById('contador')
+        tamanho2 = JSON.parse(`[${letreiro.value}]`)
+        if(letreiro.value === ""){
+          letreiro.value = v1
+          document.getElementById(`item${v1}`).style.backgroundColor='#3d1bfa'
+          document.getElementById(`item${v1}`).style.color='#fff'
+        }else{
+          if(incluiu(tamanho2, v1)){
+            document.getElementById(`item${v1}`).style.backgroundColor='#ffaa00'
+            document.getElementById(`item${v1}`).style.color='#000'
+            valore = JSON.parse(`[${letreiro.value}]`)
+            valore.splice(valore.indexOf(v1), 1);
+            valore =valore.sort(compararNumeros)
+            valore = JSON.stringify(valore)
+            letreiro.value = valore.replace("[","").replace("]","")
+            
+          }else{
+                if(tamanho2.length >= 50) return;
+                letreiro.value = letreiro.value + "," + v1
+                document.getElementById(`item${v1}`).style.backgroundColor='#3d1bfa'
+                document.getElementById(`item${v1}`).style.color='#fff'
+                valore = JSON.parse(`[${letreiro.value}]`)
+                valore =valore.sort(compararNumeros)
+                valore = JSON.stringify(valore)
+                letreiro.value = valore.replace("[","").replace("]","")
+              }
+            }
+        
+        let tamanho = JSON.parse(`[${letreiro.value}]`)
+        contador.innerText = tamanho.length
+    }
+
+    function incluiu(arr, it){
+      sent = false;
+      for(var i of arr){
+        if(i == it){
+          sent = true;
+        }
+      }
+      return sent
+    }
+    function geraNumeros(num) {
+
+    let arr = new Array();
+    while (arr.length < num){
+        let num = Math.round(Math.random() * 100)
+        if(!arr.includes(num)){
+            arr.push(num)
+        }
+
+    }
+    arr = arr.sort(compararNumeros)
+    return arr
+}
+    function compararNumeros(a, b) {
+    return a - b;
+}
+
+</script>
+
+
+{% endblock %}

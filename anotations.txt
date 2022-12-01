@@ -1,0 +1,66 @@
+
+Uma maneira simples de armazenar uma lista no Django é apenas convertê-la em uma string JSON e salvá-la como Texto no modelo. Em seguida, você pode recuperar a lista convertendo a sequência (JSON) novamente em uma lista python. Aqui está como:
+
+A "lista" seria armazenada no seu modelo do Django da seguinte forma:
+
+class MyModel(models.Model):
+    myList = models.TextField(null=True) # JSON-serialized (text) version of your list
+Na sua visão / código do controlador:
+
+Armazenando a lista no banco de dados:
+
+import simplejson as json # this would be just 'import json' in Python 2.7 and later
+...
+...
+
+myModel = MyModel()
+listIWantToStore = [1,2,3,4,5,'hello']
+myModel.myList = json.dumps(listIWantToStore)
+myModel.save()
+Recuperando a lista do banco de dados:
+
+jsonDec = json.decoder.JSONDecoder()
+myPythonList = jsonDec.decode(myModel.myList)
+Conceitualmente, aqui está o que está acontecendo:
+
+>>> myList = [1,2,3,4,5,'hello']
+>>> import simplejson as json
+>>> myJsonList = json.dumps(myList)
+>>> myJsonList
+'[1, 2, 3, 4, 5, "hello"]'
+>>> myJsonList.__class__
+<type 'str'>
+>>> jsonDec = json.decoder.JSONDecoder()
+>>> myPythonList = jsonDec.decode(myJsonList)
+>>> myPythonList
+[1, 2, 3, 4, 5, u'hello']
+>>> myPythonList.__class__
+<type 'list'>
+— ladrão de mente
+ fonte
+8
+Infelizmente isso não ajudá-lo a gerenciar a lista usando Django admin
+
+########################################################################################################################
+
+1º Metodo
+
+1. Escolha 60 dezenas de 100 e depois separe em 6 grupos de 10 numeros
+
+2. Faça 6 jogos de 50 revezando a exclusão de 10 numeros
+
+3. Pegue os outros 40 e adicione mais 20 dos já escolhidos
+
+4. Repita o passo do item 2
+
+5. Das primeiras 60 dezenas exclua as 20 primeiras
+
+6. Das 20 ultimas dezenas exclua as 20 ultimas
+
+7. Repita o passo do item 2
+
+8. Serão formados 18 jogos
+
+########################################################################################################################
+
+2º Metodo

@@ -1,0 +1,3 @@
+https://loteriascaixa-api.herokuapp.com/api/lotomania/2354 -> Concurso específico
+https://loteriascaixa-api.herokuapp.com/api/lotomania/latest -> Concurso específico
+https://loteriascaixa-api.herokuapp.com/api/lotomania -> Todos os resultados da loteria espefícica

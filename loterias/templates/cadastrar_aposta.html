@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block 'titulo'%}Cadastro{% endblock %}
+
+{% block 'content' %}
+<div class="container rounded shadow p-4">
+    {% if status == '2'%}
+      <div class="alert alert-danger" role="alert">
+        Aposta já cadastrada
+      </div>
+    {% endif %}
+    {% if status == '3'%}
+      <div class="alert alert-danger" role="alert">
+        A aposta deve conter 50 numeros
+      </div>
+    {% endif %}
+
+    {% if status == '1'%}
+        <div class="alert alert-success" role="alert">
+            Aposta(s) cadastrada(s) com sucesso
+        </div>
+    {% endif %}
+    <form action="{% url 'trata_aposta'%}" method="POST">
+      {% csrf_token %}
+          <h1 class="align-middle"> Cadastre suas apostas</h1>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Concurso</label>
+      <input type="text" name="concurso" class="form-control" placeholder="Concurso escolhido">
+      <smallclass="form-text text-muted">Insira apenas os numeros do concurso desejado</smallclass=>
+    </div>
+    <div class="border">
+      <br>
+      <div class="container">
+        <div class="row d-flex justify-content-around">
+          <button type="button" onclick="geraAlea()" class="btn btn-primary">Gerar Aleatória</button>
+          <button type="button" onclick="limpaTudo()" class="btn btn-primary">Limpar Apostas</button>
+        </div>
+      </div>
+      <br>
+      <p style="margin: 10px;font-size:20px"><span id="contador" style="font-size:30px">0</span> números escolhidos</p>
+      <br>
+      <div>
+        <button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(1)" type="button" id="item1">1</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(2)" type="button" id="item2">2</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(3)" type="button" id="item3">3</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(4)" type="button" id="item4">4</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(5)" type="button" id="item5">5</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(6)" type="button" id="item6">6</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(7)" type="button" id="item7">7</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(8)" type="button" id="item8">8</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(9)" type="button" id="item9">9</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(10)" type="button" id="item10">10</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(11)" type="button" id="item11">11</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(12)" type="button" id="item12">12</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(13)" type="button" id="item13">13</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(14)" type="button" id="item14">14</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(15)" type="button" id="item15">15</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(16)" type="button" id="item16">16</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(17)" type="button" id="item17">17</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(18)" type="button" id="item18">18</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(19)" type="button" id="item19">19</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(20)" type="button" id="item20">20</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(21)" type="button" id="item21">21</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(22)" type="button" id="item22">22</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(23)" type="button" id="item23">23</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(24)" type="button" id="item24">24</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(25)" type="button" id="item25">25</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(26)" type="button" id="item26">26</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(27)" type="button" id="item27">27</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(28)" type="button" id="item28">28</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(29)" type="button" id="item29">29</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(30)" type="button" id="item30">30</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(31)" type="button" id="item31">31</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(32)" type="button" id="item32">32</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(33)" type="button" id="item33">33</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(34)" type="button" id="item34">34</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(35)" type="button" id="item35">35</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(36)" type="button" id="item36">36</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(37)" type="button" id="item37">37</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(38)" type="button" id="item38">38</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(39)" type="button" id="item39">39</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(40)" type="button" id="item40">40</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(41)" type="button" id="item41">41</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(42)" type="button" id="item42">42</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(43)" type="button" id="item43">43</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(44)" type="button" id="item44">44</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(45)" type="button" id="item45">45</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(46)" type="button" id="item46">46</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(47)" type="button" id="item47">47</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(48)" type="button" id="item48">48</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(49)" type="button" id="item49">49</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(50)" type="button" id="item50">50</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(51)" type="button" id="item51">51</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(52)" type="button" id="item52">52</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(53)" type="button" id="item53">53</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(54)" type="button" id="item54">54</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(55)" type="button" id="item55">55</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(56)" type="button" id="item56">56</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(57)" type="button" id="item57">57</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(58)" type="button" id="item58">58</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(59)" type="button" id="item59">59</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(60)" type="button" id="item60">60</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(61)" type="button" id="item61">61</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(62)" type="button" id="item62">62</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(63)" type="button" id="item63">63</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(64)" type="button" id="item64">64</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(65)" type="button" id="item65">65</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(66)" type="button" id="item66">66</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(67)" type="button" id="item67">67</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(68)" type="button" id="item68">68</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(69)" type="button" id="item69">69</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(70)" type="button" id="item70">70</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(71)" type="button" id="item71">71</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(72)" type="button" id="item72">72</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(73)" type="button" id="item73">73</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(74)" type="button" id="item74">74</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(75)" type="button" id="item75">75</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(76)" type="button" id="item76">76</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(77)" type="button" id="item77">77</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(78)" type="button" id="item78">78</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(79)" type="button" id="item79">79</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(80)" type="button" id="item80">80</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(81)" type="button" id="item81">81</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(82)" type="button" id="item82">82</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(83)" type="button" id="item83">83</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(84)" type="button" id="item84">84</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(85)" type="button" id="item85">85</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(86)" type="button" id="item86">86</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(87)" type="button" id="item87">87</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(88)" type="button" id="item88">88</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(89)" type="button" id="item89">89</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(90)" type="button" id="item90">90</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(91)" type="button" id="item91">91</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(92)" type="button" id="item92">92</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(93)" type="button" id="item93">93</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(94)" type="button" id="item94">94</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(95)" type="button" id="item95">95</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(96)" type="button" id="item96">96</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(97)" type="button" id="item97">97</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(98)" type="button" id="item98">98</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(99)" type="button" id="item99">99</button><button class="bolinhas rounded-circle border border-dark m1" onclick="insere_num(100)" type="button" id="item100">100</button>
+      </div>
+      <br>
+      <input class="form-control border" name="num_selected" id="escolhidos" type="text" placeholder="Numeros escolhidos..."  readonly>
+
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Data</label>
+
+      <input type="date" id="data" name="data" class="form-control">
+
+    </div>
+    <div class="container mt-4 mb-4 " style="font-weight:bold;color:white;background-color:orange;width:50%">
+      <label class="m-2" for="teimosinha">TEIMOSINHA</label>
+      <input class="m-2" type="checkbox" name="teimosinha" id="teimosinha">
+      <select class="form-select" aria-label="Default select example" name="selteimosinha" id="selteimosinha">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+      <input style="width: 100%;" type="submit" value="Apostar" class="btn btn-success mb-3">
+</form>
+</div>
+
+<script>
+    function geraAlea(){
+      let arri = geraNumeros(50)
+      letreiro = document.getElementById('escolhidos')
+      contador = document.getElementById('contador')
+      limpaBolinhas()
+      for(let v1 of arri){
+        document.getElementById(`item${v1}`).style.backgroundColor='#3d1bfa'
+        document.getElementById(`item${v1}`).style.color='#fff'
+      }
+      contador = document.getElementById('contador')
+      contador.innerText = arri.length
+      nova = JSON.stringify(arri)
+      nova = nova.replace('[','')
+      nova = nova.replace(']','')
+      letreiro.value = nova
+
+    }
+    function limpaTudo(){
+      limpaBolinhas()
+      document.getElementById('escolhidos').value = ""
+      document.getElementById('data').value = ""
+      contador.innerText = 0
+    }
+    function limpaBolinhas(){
+      letreiro = document.getElementById('escolhidos')
+      bolinhas = document.querySelectorAll('.bolinhas')
+      for(let bolinha of bolinhas){
+        bolinha.style.backgroundColor='#ffaa00'
+        bolinha.style.color='#000'
+      }
+
+    }
+
+    function insere_num(v1){
+        letreiro = document.getElementById('escolhidos')
+        contador = document.getElementById('contador')
+        tamanho2 = JSON.parse(`[${letreiro.value}]`)
+        if(letreiro.value === ""){
+          letreiro.value = v1
+          document.getElementById(`item${v1}`).style.backgroundColor='#3d1bfa'
+          document.getElementById(`item${v1}`).style.color='#fff'
+        }else{
+          if(incluiu(tamanho2, v1)){
+            document.getElementById(`item${v1}`).style.backgroundColor='#ffaa00'
+            document.getElementById(`item${v1}`).style.color='#000'
+            valore = JSON.parse(`[${letreiro.value}]`)
+            valore.splice(valore.indexOf(v1), 1);
+            valore =valore.sort(compararNumeros)
+            valore = JSON.stringify(valore)
+            letreiro.value = valore.replace("[","").replace("]","")
+            
+          }else{
+                if(tamanho2.length >= 50) return;
+                letreiro.value = letreiro.value + "," + v1
+                document.getElementById(`item${v1}`).style.backgroundColor='#3d1bfa'
+                document.getElementById(`item${v1}`).style.color='#fff'
+                valore = JSON.parse(`[${letreiro.value}]`)
+                valore =valore.sort(compararNumeros)
+                valore = JSON.stringify(valore)
+                letreiro.value = valore.replace("[","").replace("]","")
+              }
+            }
+        
+        let tamanho = JSON.parse(`[${letreiro.value}]`)
+        contador.innerText = tamanho.length
+    }
+
+    function incluiu(arr, it){
+      sent = false;
+      for(var i of arr){
+        if(i == it){
+          sent = true;
+        }
+      }
+      return sent
+    }
+    function geraNumeros(num) {
+
+    let arr = new Array();
+    while (arr.length < num){
+        let num = Math.round(Math.random() * 100)
+        if(!arr.includes(num)){
+            arr.push(num)
+        }
+
+    }
+    arr = arr.sort(compararNumeros)
+    return arr
+}
+    function compararNumeros(a, b) {
+    return a - b;
+}
+
+</script>
+
+
+{% endblock %}

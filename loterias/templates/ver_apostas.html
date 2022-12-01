@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block 'titulo'%}Home Page{% endblock %}
+
+{% block 'content' %}
+
+<div class="container rounded shadow justify-content-center table-responsive">
+    <div class="container">
+        <h2> Minhas Apostas</h2>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" >
+                   <a href="{% url 'sync'%}" style="color: white;">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                   <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                   <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+               </svg> SYNC</a>
+           </button>
+        </div>
+    </div>
+    <br>
+    {% if status == '1'%}
+    <div class="alert alert-success" role="alert">
+        Aposta excluida com sucesso!!
+    </div>
+    <br>
+    {% elif status == '2'%}
+    <div class="alert alert-success" role="alert">
+        Aposta editada com sucesso!!
+    </div>
+    {% elif status == '4'%}
+    <div class="alert alert-success" role="alert">
+        Base de Dados Sincronizada com sucesso!!
+    </div>
+
+    {% endif %}
+    <div class="container table-responsive">
+        <table class="table table-responsive" style="display: inline-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Concurso</th>
+                    <th scope="col">Acertos</th>
+                    <th scope="col">Numeros</th>
+                    <th scope="col">Premiado</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">    </th>
+                    <th scope="col">    </th>
+    </tr>
+</thead>
+<tbody>
+    {% for sorteio in conf %}
+    {% if sorteio.resultado %}
+            <tr>
+            <td>{{sorteio.concurso}}</td>
+            <td>{{sorteio.resultado}}...</td>
+            <td>
+                <div class="ajuste">
+                {% for numb in sorteio.num_selected%}
+                <span class="numer-g">{{numb}}</span>
+                {% endfor%}
+            </div>
+            </td>
+            <td>---</td>
+            <td>R$ 0</td>
+            <td>
+            <button class="btn btn-success">
+            <a href="{% url 'edita_apostas' sorteio.pk%}" style="color: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+            </svg>
+            </button>
+        </td>
+        <td>
+            <button onclick="return confirm('Deseja excluir a aposta?')" class="btn btn-danger" >
+            <a href="{% url 'excluir_apostas' sorteio.pk%}" style="color: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-x" viewBox="0 0 16 16">
+                <path d="M6.854 7.146a.5.5 0 1 0-.708.708L7.293 9l-1.147 1.146a.5.5 0 0 0 .708.708L8 9.707l1.146 1.147a.5.5 0 0 0 .708-.708L8.707 9l1.147-1.146a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+            </svg>
+            </a>
+            </button>
+        </td>
+        </tr>
+    {% else %}
+        <tr>
+        <td>{{sorteio.concurso}}</td>
+        <td>{{sorteio.acertos_n}} acertos</td>
+        <td>
+            <div class="ajuste">
+                {% for numb in sorteio.num_selected%}
+                {% if  numb in sorteio.resultados%}
+                <span class="numer-n">{{numb}}</span>
+                {% else %}
+                <span class="numer-g">{{numb}}</span>
+                {% endif %}
+                {% endfor%}
+            </div>
+        </td>
+        {% comment %} Premio de 20 pontos {% endcomment %}
+        {% if sorteio.acertos_n == 20%}
+        {% for prem in sorteio.premiacoes %}
+        {% if prem.acertos == '20 Pontos' %}
+        <td><span style="font-weight:bold;color:#0c5c10;background-color:#33f53d;border: 1px solid #0c5c10;padding: 3px;">Premiado</span></td>
+        <td>R$ {{prem.premio}}</td>
+        {% endif %}
+        {% endfor %}
+        {% comment %} Premio de 19 pontos {% endcomment %}
+        {% elif sorteio.acertos_n == 19%}
+        {% for prem in sorteio.premiacoes %}
+        {% if prem.acertos == '19 Pontos' %}
+        <td><span style="font-weight:bold;color:#0c5c10;background-color:#33f53d;border: 1px solid #0c5c10;padding: 3px;">Premiado</span></td>
+        <td>R$ {{prem.premio}}</td>
+        {% endif %}
+        {% endfor %}
+        {% comment %} Premio de 18 pontos {% endcomment %}
+        {% elif sorteio.acertos_n == 18%}
+        {% for prem in sorteio.premiacoes %}
+        {% if prem.acertos == '18 Pontos' %}
+        <td><span style="font-weight:bold;color:#0c5c10;background-color:#33f53d;border: 1px solid #0c5c10;padding: 3px;">Premiado</span></td>
+        <td>R$ {{prem.premio}}</td>
+        {% endif %}
+        {% endfor %}
+        {% comment %} Premio de 17 pontos {% endcomment %}
+        {% elif sorteio.acertos_n == 17%}
+        {% for prem in sorteio.premiacoes %}
+        {% if prem.acertos == '17 Pontos' %}
+        <td><span style="font-weight:bold;color:#0c5c10;background-color:#33f53d;border: 1px solid #0c5c10;padding: 3px;">Premiado</span></td>
+        <td>R$ {{prem.premio}}</td>
+        {% endif %}
+        {% endfor %}
+        {% comment %} Premio de 16 pontos {% endcomment %}
+        {% elif sorteio.acertos_n == 16%}
+        {% for prem in sorteio.premiacoes %}
+        {% if prem.acertos == '16 Pontos' %}
+        <td><span style="font-weight:bold;color:#0c5c10;background-color:#33f53d;border: 1px solid #0c5c10;padding: 3px;">Premiado</span></td>
+        <td>R$ {{prem.premio}}</td>
+        {% endif %}
+        {% endfor %}
+        {% comment %} Premio de 15 pontos {% endcomment %}
+        {% elif sorteio.acertos_n == 15%}
+        {% for prem in sorteio.premiacoes %}
+        {% if prem.acertos == '15 Pontos' %}
+        <td><span style="font-weight:bold;color:#0c5c10;background-color:#33f53d;border: 1px solid #0c5c10;padding: 3px;">Premiado</span></td>
+        <td>R$ {{prem.premio}}</td>
+        {% endif %}
+        {% endfor %}
+        {% comment %} Menos de 15 pontos {% endcomment %}
+        {% else %}
+        <td><span style="font-weight:bold;color:#730a02;background-color:#e36a62;border: 1px solid #0c5c10;padding: 3px;">Não premiado</span></td>
+        <td>R$ 0</td>
+        {% endif %}
+        <td>
+            <button class="btn btn-success">
+                <a href="{% url 'edita_apostas' sorteio.pk%}" style="color: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+            </svg>
+            </button>
+        </td>
+        <td>
+            <button class="btn btn-danger" onclick="return confirm('Deseja excluir a aposta?')">
+                <a href="{% url 'excluir_apostas' sorteio.pk%}" style="color: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-x" viewBox="0 0 16 16">
+                <path d="M6.854 7.146a.5.5 0 1 0-.708.708L7.293 9l-1.147 1.146a.5.5 0 0 0 .708.708L8 9.707l1.146 1.147a.5.5 0 0 0 .708-.708L8.707 9l1.147-1.146a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+            </svg>
+            </a>
+            </button>
+        </td>
+        </tr>
+        
+        {% endif %}
+        
+        {% endfor %}
+        
+        </tbody>
+</table>
+</div>
+</div>
+{% endblock %}
